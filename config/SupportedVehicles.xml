@@ -33,5 +33,9 @@
             <loadingArea offset="0 0.646 -0.895" width="2.00" height="2.00" length="4.32"/>
 			<options noLoadingIfUnfolded="true"/>
         </vehicleConfiguration>
+        <vehicleConfiguration configFileName="data/vehicles/boeckmann/kk301827H/kk301827H.xml">
+            <loadingArea offset="0 0.646 -0.75" width="2.30" height="1.90" length="3.25"/>
+			<options noLoadingIfUnfolded="false" enableRearLoading="true" showDebug="true"/>
+        </vehicleConfiguration>
     </vehicleConfigurations>
 </universalAutoLoad>
