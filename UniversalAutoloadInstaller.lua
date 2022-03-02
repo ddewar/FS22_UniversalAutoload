@@ -39,6 +39,7 @@ UniversalAutoload.ACTIONS = {
 UniversalAutoload.WARNINGS = {
 	[1] = "warning_UNIVERSALAUTOLOAD_CLEAR_UNLOADING_AREA",
 	[2] = "warning_UNIVERSALAUTOLOAD_NO_OBJECTS_FOUND",
+	[3] = "warning_UNIVERSALAUTOLOAD_NO_LOADING_UNLESS_STATIONARY",
 	[99] = "warning_UNIVERSALAUTOLOAD_TENSION_BELTS_DISABLED"
 }
 
@@ -209,7 +210,6 @@ function UniversalAutoload.ImportContainerTypeConfigurations(xmlFilename)
 				end
 				xmlFile:delete()
 			end
-			--DebugUtil.printTableRecursively(fillType, "--", 0, 1)
         end
     end
 
