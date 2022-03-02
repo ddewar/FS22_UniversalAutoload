@@ -7,6 +7,8 @@ UniversalAutoload.name = g_currentModName
 UniversalAutoload.path = g_currentModDirectory
 UniversalAutoload.debugEnabled = false
 UniversalAutoload.delayTime = 200
+UniversalAutoload.addonModName = "FS22_UniversalAutoloadModhubAddon"
+UniversalAutoload.addonInstalled = false
 
 -- EVENTS
 source(g_currentModDirectory.."events/CycleContainerEvent.lua")
@@ -55,6 +57,8 @@ function UniversalAutoload.initSpecialization()
 	}
 	for _, s in ipairs(schemas) do
 		s.schema:register(XMLValueType.STRING, s.key.."#configFileName", "Vehicle config file xml full path - used to identify supported vechicles", nil)
+		s.schema:register(XMLValueType.STRING, s.key.."#modName", "Mod directory name - used to identify supported mod vechicles", nil)
+		s.schema:register(XMLValueType.STRING, s.key.."#version", "Mod version from mod's moddesc - used to identify supported mod vechicles", nil)
 		s.schema:register(XMLValueType.STRING, s.key.."#selectedConfigs", "Selected Configuration Names", nil)
 		s.schema:register(XMLValueType.VECTOR_TRANS, s.key..".loadingArea#offset", "Offset to the centre of the loading area", "0 0 0")
 		s.schema:register(XMLValueType.FLOAT, s.key..".loadingArea#height", "Height of the loading area", 0)
@@ -1075,9 +1079,18 @@ function UniversalAutoload:onLoad(savegame)
 	local xmlFile = XMLFile.load("configXml", configFileName, Vehicle.xmlSchema)
 
 	if xmlFile ~= 0 then
-		if UniversalAutoload.VEHICLE_CONFIGURATIONS[configFileName] ~= nil then
+		local config = UniversalAutoload.VEHICLE_CONFIGURATIONS[configFileName]
+		if config == nil and UniversalAutoload.addonInstalled then
+			local parsedPath, parseFilename = string.match(configFileName, "^(.*/)([^/]-)$")
+			local modName = parsedPath:gsub(g_modsDirectory, ""):sub(0, -2)
+			local mod = g_modManager:getModByName(modName)
+			if mod ~= nil then
+				local modConfig = parseFilename .. modName .. mod.version
+				config = UniversalAutoload.VEHICLE_CONFIGURATIONS[modConfig]
+			end
+		end
 
-			local config = UniversalAutoload.VEHICLE_CONFIGURATIONS[configFileName]
+		if config ~= nil then
 			local selectedConfigs = config.selectedConfigs
 			local validConfig = UniversalAutoload.getIsValidConfiguration(self, selectedConfigs, xmlFile, key)
 			if validConfig ~= nil then
