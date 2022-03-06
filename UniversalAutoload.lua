@@ -9,6 +9,8 @@ UniversalAutoload.debugEnabled = false
 UniversalAutoload.delayTime = 200
 UniversalAutoload.addonModName = "FS22_UniversalAutoloadModhubAddon"
 UniversalAutoload.addonInstalled = false
+UniversalAutoload.userModSettingsExists = false
+UniversalAutoload.userModSettingsPath = "modSettings/UniversalAutoload.xml"
 
 -- EVENTS
 source(g_currentModDirectory.."events/CycleContainerEvent.lua")

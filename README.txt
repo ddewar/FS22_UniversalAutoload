@@ -53,6 +53,20 @@
 ==============================================================
   There is a hard coded list of supported base game trailers, but the specialisation will also be applied to any correctly configured mod trailers.  There is no need to add any shapes or objects to your model.  All that is required is some additions to the vehcile xml.
   
+  Add configurations to the UniversalAutoload.xml file in the modSettings folder (Created on first map load with the mod installed) to add your own trailer loading areas:
+  <universalAutoLoad>
+    <vehicleConfigurations>
+      <!--Base Game Item Example-->
+      <vehicleConfiguration configFileName="data/vehicles/welger/dk115/dk115.xml" selectedConfigs="2">
+          <loadingArea offset="0 1.339 -0.165" width="1.95" height="2.00" length="4.525"/>
+      </vehicleConfiguration>
+      <!--Mod Example-->
+      <vehicleConfiguration configFileName="lizardgooseneck.xml" modName="FS22_20ftGooseneck" version="1.0.0.0">
+          <loadingArea offset="0.000 1.100 -0.300" width="3.00" height="2.20" length="7.50"/>
+          <options enableRearLoading="true" enableSideLoading="true"/>
+      </vehicleConfiguration>
+    </vehicleConfigurations>
+  </universalAutoLoad>
 
   Add the following to your xml to use the specialisation in your mod trailer:
   	<vehicle>

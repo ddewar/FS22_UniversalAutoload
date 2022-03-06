@@ -351,6 +351,16 @@ function UniversalAutoloadManager:loadMap(name)
 		local addonVehicleSettingsFile = Utils.getFilename("config/SupportedVehicles.xml", addonPath)
 		UniversalAutoload.ImportVehicleConfigurations(addonVehicleSettingsFile)
 	end
+
+	UniversalAutoload.userModSettingsExists = fileExists(getUserProfileAppPath()..UniversalAutoload.userModSettingsPath)
+	if UniversalAutoload.userModSettingsExists then
+		print("  USER MODSETTING VEHICLES:")
+		local userModSettingsFile = Utils.getFilename(UniversalAutoload.userModSettingsPath, getUserProfileAppPath())
+		UniversalAutoload.ImportVehicleConfigurations(userModSettingsFile)
+	else
+		print("Creating Universal Autoload modSettings user settings file.")
+		copyFile(Utils.getFilename("config/UniversalAutoload.xml", UniversalAutoload.path), Utils.getFilename(UniversalAutoload.userModSettingsPath, getUserProfileAppPath()), false);
+	end
 	UniversalAutoload.detectKeybindingConflicts()
 end
 
