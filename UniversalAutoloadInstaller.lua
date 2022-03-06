@@ -65,7 +65,6 @@ UniversalAutoload.UNKNOWN_TYPES = {}
 UniversalAutoload.VEHICLE_CONFIGURATIONS = {}
 function UniversalAutoload.ImportVehicleConfigurations(xmlFilename)
 
-	print("  IMPORT supported vehicle configurations")
 	local xmlFile = XMLFile.load("configXml", xmlFilename, UniversalAutoload.xmlSchema)
 	if xmlFile ~= 0 then
 	
@@ -78,9 +77,11 @@ function UniversalAutoload.ImportVehicleConfigurations(xmlFilename)
 			end
 
 			local configFileName = xmlFile:getValue(configKey.."#configFileName")
-			
-			UniversalAutoload.VEHICLE_CONFIGURATIONS[configFileName] = {}
-			local config = UniversalAutoload.VEHICLE_CONFIGURATIONS[configFileName]
+			local modName = xmlFile:getValue(configKey.."#modName", "")
+		    local version = xmlFile:getValue(configKey.."#version", "")
+			local key = configFileName .. modName .. version
+			UniversalAutoload.VEHICLE_CONFIGURATIONS[key] = {}
+			local config = UniversalAutoload.VEHICLE_CONFIGURATIONS[key]
 			config.selectedConfigs = xmlFile:getValue(configKey.."#selectedConfigs")
 			config.width  = xmlFile:getValue(configKey..".loadingArea#width")
 			config.length = xmlFile:getValue(configKey..".loadingArea#length")
@@ -93,8 +94,8 @@ function UniversalAutoload.ImportVehicleConfigurations(xmlFilename)
 			config.noLoadingIfUnfolded = xmlFile:getValue(configKey..".options#noLoadingIfUnfolded", false)
 			--config.disableAutoStrap = xmlFile:getValue(configKey..".options#disableAutoStrap", false)
 			config.showDebug = xmlFile:getValue(configKey..".options#showDebug", false)
-
-			print("  >> "..configFileName)
+			
+			print("  >> "..key)
 
 			i = i + 1
 		end
@@ -337,14 +338,20 @@ function UniversalAutoloadManager:loadMap(name)
 		-- print("  - "..i..": "..key.." = "..UniversalAutoload.MATERIALS_FILLTYPE[i].title)
 		UniversalAutoload.MATERIALS_INDEX[key] = i
 	end
-		
+	
+	print("  IMPORT supported vehicle configurations")
 	local vehicleSettingsFile = Utils.getFilename("config/SupportedVehicles.xml", UniversalAutoload.path)
 	UniversalAutoload.ImportVehicleConfigurations(vehicleSettingsFile)
 	local ContainerTypeSettingsFile = Utils.getFilename("config/ContainerTypes.xml", UniversalAutoload.path)
 	UniversalAutoload.ImportContainerTypeConfigurations(ContainerTypeSettingsFile)
-	
+	UniversalAutoload.addonInstalled = g_modIsLoaded[UniversalAutoload.addonModName] --g_modManager:getIsModAvailable(UniversalAutoload.addonModName)
+	if UniversalAutoload.addonInstalled then
+		print("  ADDON VEHICLES:")
+		local addonPath = g_modManager:getModByName(UniversalAutoload.addonModName).modDir
+		local addonVehicleSettingsFile = Utils.getFilename("config/SupportedVehicles.xml", addonPath)
+		UniversalAutoload.ImportVehicleConfigurations(addonVehicleSettingsFile)
+	end
 	UniversalAutoload.detectKeybindingConflicts()
-
 end
 
 function UniversalAutoloadManager:deleteMap()
