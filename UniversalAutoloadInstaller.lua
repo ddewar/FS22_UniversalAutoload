@@ -77,11 +77,8 @@ function UniversalAutoload.ImportVehicleConfigurations(xmlFilename)
 			end
 
 			local configFileName = xmlFile:getValue(configKey.."#configFileName")
-			local modName = xmlFile:getValue(configKey.."#modName", "")
-		    local version = xmlFile:getValue(configKey.."#version", "")
-			local key = configFileName .. modName .. version
-			UniversalAutoload.VEHICLE_CONFIGURATIONS[key] = {}
-			local config = UniversalAutoload.VEHICLE_CONFIGURATIONS[key]
+			UniversalAutoload.VEHICLE_CONFIGURATIONS[configFileName] = {}
+			local config = UniversalAutoload.VEHICLE_CONFIGURATIONS[configFileName]
 			config.selectedConfigs = xmlFile:getValue(configKey.."#selectedConfigs")
 			config.width  = xmlFile:getValue(configKey..".loadingArea#width")
 			config.length = xmlFile:getValue(configKey..".loadingArea#length")
@@ -95,7 +92,7 @@ function UniversalAutoload.ImportVehicleConfigurations(xmlFilename)
 			--config.disableAutoStrap = xmlFile:getValue(configKey..".options#disableAutoStrap", false)
 			config.showDebug = xmlFile:getValue(configKey..".options#showDebug", false)
 			
-			print("  >> "..key)
+			print("  >> "..configFileName)
 
 			i = i + 1
 		end

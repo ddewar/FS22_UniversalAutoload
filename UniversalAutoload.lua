@@ -46,8 +46,6 @@ function UniversalAutoload.initSpecialization()
 	}
 	for _, s in ipairs(schemas) do
 		s.schema:register(XMLValueType.STRING, s.key.."#configFileName", "Vehicle config file xml full path - used to identify supported vechicles", nil)
-		s.schema:register(XMLValueType.STRING, s.key.."#modName", "Mod directory name - used to identify supported mod vechicles", nil)
-		s.schema:register(XMLValueType.STRING, s.key.."#version", "Mod version from mod's moddesc - used to identify supported mod vechicles", nil)
 		s.schema:register(XMLValueType.STRING, s.key.."#selectedConfigs", "Selected Configuration Names", nil)
 		s.schema:register(XMLValueType.VECTOR_TRANS, s.key..".loadingArea#offset", "Offset to the centre of the loading area", "0 0 0")
 		s.schema:register(XMLValueType.FLOAT, s.key..".loadingArea#height", "Height of the loading area", 0)
@@ -1143,14 +1141,9 @@ function UniversalAutoload:onLoad(savegame)
 	
 	if xmlFile ~= 0 then
 		local config = UniversalAutoload.VEHICLE_CONFIGURATIONS[configFileName]
-		if config == nil and UniversalAutoload.addonInstalled then
-			local parsedPath, parseFilename = string.match(configFileName, "^(.*/)([^/]-)$")
-			local modName = parsedPath:gsub(g_modsDirectory, ""):sub(0, -2)
-			local mod = g_modManager:getModByName(modName)
-			if mod ~= nil then
-				local modConfig = parseFilename .. modName .. mod.version
-				config = UniversalAutoload.VEHICLE_CONFIGURATIONS[modConfig]
-			end
+		if config == nil then
+			local modConfigFileName = configFileName:gsub(g_modsDirectory, "")
+			config = UniversalAutoload.VEHICLE_CONFIGURATIONS[modConfigFileName]
 		end
 
 		if config ~= nil then
