@@ -1140,13 +1140,9 @@ function UniversalAutoload:onLoad(savegame)
 	end
 	
 	if xmlFile ~= 0 then
-		local config = UniversalAutoload.VEHICLE_CONFIGURATIONS[configFileName]
-		if config == nil then
-			local modConfigFileName = configFileName:gsub(g_modsDirectory, "")
-			config = UniversalAutoload.VEHICLE_CONFIGURATIONS[modConfigFileName]
-		end
+		if UniversalAutoload.VEHICLE_CONFIGURATIONS[configFileName] ~= nil then
 
-		if config ~= nil then
+			local config = UniversalAutoload.VEHICLE_CONFIGURATIONS[configFileName]
 			local selectedConfigs = config.selectedConfigs
 			local validConfig = UniversalAutoload.getIsValidConfiguration(self, selectedConfigs, xmlFile, key)
 			if validConfig ~= nil then

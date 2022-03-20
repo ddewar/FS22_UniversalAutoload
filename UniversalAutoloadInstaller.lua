@@ -91,7 +91,6 @@ function UniversalAutoload.ImportVehicleConfigurations(xmlFilename)
 			config.noLoadingIfUnfolded = xmlFile:getValue(configKey..".options#noLoadingIfUnfolded", false)
 			--config.disableAutoStrap = xmlFile:getValue(configKey..".options#disableAutoStrap", false)
 			config.showDebug = xmlFile:getValue(configKey..".options#showDebug", false)
-			
 			print("  >> "..configFileName)
 
 			i = i + 1
